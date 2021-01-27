@@ -5,7 +5,9 @@ import model.Qualification;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Lender {
     private long availableFund;
@@ -100,5 +102,12 @@ public class Lender {
                 availableFund += loan.getLoanAmount();
                 pendingFund -= loan.getLoanAmount();
             });
+    }
+
+    public Set<Loan> find(LoanStatus status) {
+        return loans.values()
+            .stream()
+            .filter(loan -> status.equals(loan.getStatus()))
+            .collect(Collectors.toSet());
     }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -163,5 +164,30 @@ public class LenderTest {
         assertEquals(LoanStatus.APPROVED, subject.getLoans().get(nonExpiredLoan.getId()).getStatus());
         assertEquals(250000, subject.getPendingFund());
         assertEquals(850000, subject.getAvailableFund());
+    }
+
+    @Test
+    void findLoanByStatus() throws LoanProcessException {
+        subject.qualifyLoan(fullyQualifiedLoan);
+        subject.qualifyLoan(lowDTILoan);
+        subject.qualifyLoan(lowCreditScoreLoan);
+        subject.qualifyLoan(partiallyQualifiedLoan);
+
+        assertEquals(
+            Set.of(fullyQualifiedLoan, partiallyQualifiedLoan),
+            subject.find(LoanStatus.QUALIFIED)
+        );
+
+        assertEquals(
+            Set.of(lowDTILoan, lowCreditScoreLoan),
+            subject.find(LoanStatus.DENIED)
+        );
+
+        subject.process(fullyQualifiedLoan.getId());
+
+        assertEquals(
+            Set.of(fullyQualifiedLoan),
+            subject.find(LoanStatus.ON_HOLD)
+        );
     }
 }
