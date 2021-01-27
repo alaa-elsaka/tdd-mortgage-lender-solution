@@ -106,4 +106,30 @@ public class LenderTest {
 
         assertEquals("Do not process unqualified loan", exception.getMessage());
     }
+
+    @Test
+    void applicantReply_accept() throws Exception {
+        subject.addFund(150000);
+        subject.qualifyLoan(fullyQualifiedLoan);
+        subject.process(fullyQualifiedLoan.getId());
+
+        Loan loan = subject.applicantReply(fullyQualifiedLoan.getId(), true);
+
+        assertEquals(LoanStatus.ACCEPTED, loan.getStatus());
+        assertEquals(0, subject.getAvailableFund());
+        assertEquals(0, subject.getPendingFund());
+    }
+
+    @Test
+    void applicantReply_reject() throws Exception {
+        subject.addFund(150000);
+        subject.qualifyLoan(partiallyQualifiedLoan);
+        subject.process(partiallyQualifiedLoan.getId());
+
+        Loan loan = subject.applicantReply(partiallyQualifiedLoan.getId(), false);
+
+        assertEquals(LoanStatus.REJECTED, loan.getStatus());
+        assertEquals(250000, subject.getAvailableFund());
+        assertEquals(0, subject.getPendingFund());
+    }
 }

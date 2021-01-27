@@ -68,4 +68,18 @@ public class Lender {
 
         return loan;
     }
+
+    public Loan applicantReply(UUID id, boolean accept) {
+        Loan loan = loans.get(id);
+        pendingFund -= loan.getLoanAmount();
+
+        if (accept) {
+            loan.setStatus(LoanStatus.ACCEPTED);
+        } else {
+            loan.setStatus(LoanStatus.REJECTED);
+            availableFund += loan.getLoanAmount();
+        }
+
+        return loan;
+    }
 }
