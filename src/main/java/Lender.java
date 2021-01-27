@@ -8,4 +8,8 @@ public class Lender {
     public long checkAvailableFund() {
         return availableFund;
     }
+
+    public void addFund(long amount) {
+        availableFund += amount;
+    }
 }
