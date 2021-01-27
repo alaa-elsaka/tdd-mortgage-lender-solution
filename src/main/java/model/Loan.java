@@ -1,6 +1,6 @@
 package model;
 
-public class LoanApplication {
+public class Loan {
     private final long requestedAmount;
     private final int dti;
     private final int creditScore;
@@ -9,7 +9,7 @@ public class LoanApplication {
     private long loanAmount;
     private LoanStatus status;
 
-    public LoanApplication(long requestedAmount, int dti, int creditScore, long savings) {
+    public Loan(long requestedAmount, int dti, int creditScore, long savings) {
         this.requestedAmount = requestedAmount;
         this.dti = dti;
         this.creditScore = creditScore;

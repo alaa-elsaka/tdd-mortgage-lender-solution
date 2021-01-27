@@ -1,12 +1,17 @@
-import model.LoanApplication;
+import model.Loan;
 import model.LoanStatus;
 import model.Qualification;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Lender {
     private long availableFund;
+    private final List<Loan> loans;
 
     public Lender(long initialFund) {
         this.availableFund = initialFund;
+        this.loans = new ArrayList<>();
     }
 
     public long checkAvailableFund() {
@@ -17,20 +22,25 @@ public class Lender {
         availableFund += amount;
     }
 
-    public LoanApplication qualifyLoan(LoanApplication application) {
-        if (application.getDti() >= 36 || application.getCreditScore() <= 620) {
-            application.setQualification(Qualification.NOT_QUALIFIED);
-            application.setLoanAmount(0);
-            application.setStatus(LoanStatus.DENIED);
-        } else if (application.getSavings() < (application.getRequestedAmount() * 0.25)) {
-            application.setQualification(Qualification.PARTIALLY_QUALIFIED);
-            application.setLoanAmount(application.getSavings() * 4);
-            application.setStatus(LoanStatus.QUALIFIED);
+    public Loan qualifyLoan(Loan loan) {
+        if (loan.getDti() >= 36 || loan.getCreditScore() <= 620) {
+            loan.setQualification(Qualification.NOT_QUALIFIED);
+            loan.setLoanAmount(0);
+            loan.setStatus(LoanStatus.DENIED);
+        } else if (loan.getSavings() < (loan.getRequestedAmount() * 0.25)) {
+            loan.setQualification(Qualification.PARTIALLY_QUALIFIED);
+            loan.setLoanAmount(loan.getSavings() * 4);
+            loan.setStatus(LoanStatus.QUALIFIED);
         } else {
-            application.setQualification(Qualification.FULLY_QUALIFIED);
-            application.setLoanAmount(application.getRequestedAmount());
-            application.setStatus(LoanStatus.QUALIFIED);
+            loan.setQualification(Qualification.FULLY_QUALIFIED);
+            loan.setLoanAmount(loan.getRequestedAmount());
+            loan.setStatus(LoanStatus.QUALIFIED);
         }
-        return application;
+        loans.add(loan);
+        return loan;
+    }
+
+    public List<Loan> getLoans() {
+        return loans;
     }
 }
