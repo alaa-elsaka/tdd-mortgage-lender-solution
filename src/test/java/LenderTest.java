@@ -5,14 +5,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LenderTest {
 
     private Lender subject;
+    private Loan fullyQualifiedLoan;
+    private Loan lowDTILoan;
+    private Loan lowCreditScoreLoan;
+    private Loan partiallyQualifiedLoan;
 
     @BeforeEach
     void setUp() {
         subject = new Lender(100000);
+        fullyQualifiedLoan = new Loan(250000, 21, 700, 100000);
+        lowDTILoan = new Loan(250000, 37, 700, 100000);
+        lowCreditScoreLoan = new Loan(250000, 30, 600, 100000);
+        partiallyQualifiedLoan = new Loan(250000, 30, 700, 50000);
     }
 
     @Test
@@ -32,9 +41,7 @@ public class LenderTest {
 
     @Test
     void qualifyLoan_qualified() {
-        Loan loan = subject.qualifyLoan(
-            new Loan(250000, 21, 700, 100000)
-        );
+        Loan loan = subject.qualifyLoan(fullyQualifiedLoan);
 
         assertEquals(Qualification.FULLY_QUALIFIED, loan.getQualification());
         assertEquals(250000, loan.getLoanAmount());
@@ -44,9 +51,7 @@ public class LenderTest {
 
     @Test
     void qualifyLoan_highDTI_denied() {
-        Loan loan = subject.qualifyLoan(
-            new Loan(250000, 37, 700, 100000)
-        );
+        Loan loan = subject.qualifyLoan(lowDTILoan);
 
         assertEquals(Qualification.NOT_QUALIFIED, loan.getQualification());
         assertEquals(0, loan.getLoanAmount());
@@ -55,9 +60,7 @@ public class LenderTest {
 
     @Test
     void qualifyLoan_lowCreditScore_denied() {
-        Loan loan = subject.qualifyLoan(
-            new Loan(250000, 30, 600, 100000)
-        );
+        Loan loan = subject.qualifyLoan(lowCreditScoreLoan);
 
         assertEquals(Qualification.NOT_QUALIFIED, loan.getQualification());
         assertEquals(0, loan.getLoanAmount());
@@ -66,12 +69,39 @@ public class LenderTest {
 
     @Test
     void qualifyLoan_partiallyQualified() {
-        Loan loan = subject.qualifyLoan(
-            new Loan(250000, 30, 700, 50000)
-        );
+        Loan loan = subject.qualifyLoan(partiallyQualifiedLoan);
 
         assertEquals(Qualification.PARTIALLY_QUALIFIED, loan.getQualification());
         assertEquals(200000, loan.getLoanAmount());
         assertEquals(LoanStatus.QUALIFIED, loan.getStatus());
+    }
+
+    @Test
+    void process_approved() throws Exception {
+        subject.addFund(150000);
+        subject.qualifyLoan(fullyQualifiedLoan);
+
+        Loan loan = subject.process(fullyQualifiedLoan.getId());
+
+        assertEquals(LoanStatus.APPROVED, loan.getStatus());
+    }
+
+    @Test
+    void process_insufficientFund_onHold() throws Exception {
+        subject.qualifyLoan(fullyQualifiedLoan);
+
+        Loan loan = subject.process(fullyQualifiedLoan.getId());
+
+        assertEquals(LoanStatus.ON_HOLD, loan.getStatus());
+    }
+
+    @Test
+    void process_notQualified_throwsException() {
+        subject.qualifyLoan(lowDTILoan);
+
+        LoanProcessException exception =
+            assertThrows(LoanProcessException.class, () -> subject.process(lowDTILoan.getId()));
+
+        assertEquals("Do not process unqualified loan", exception.getMessage());
     }
 }

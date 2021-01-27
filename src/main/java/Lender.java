@@ -4,6 +4,7 @@ import model.Qualification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Lender {
     private long availableFund;
@@ -42,5 +43,25 @@ public class Lender {
 
     public List<Loan> getLoans() {
         return loans;
+    }
+
+    public Loan process(UUID id) throws LoanProcessException {
+        Loan loan = loans
+            .stream()
+            .filter(l -> id.equals(l.getId()))
+            .findAny()
+            .orElseThrow();
+
+        if (loan.getStatus() != LoanStatus.QUALIFIED) {
+            throw new LoanProcessException("Do not process unqualified loan");
+        }
+
+        if (loan.getLoanAmount() <= availableFund) {
+            loan.setStatus(LoanStatus.APPROVED);
+        } else {
+            loan.setStatus(LoanStatus.ON_HOLD);
+        }
+
+        return loan;
     }
 }

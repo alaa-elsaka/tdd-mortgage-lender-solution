@@ -2,5 +2,7 @@ package model;
 
 public enum LoanStatus {
     QUALIFIED,
-    DENIED
+    DENIED,
+    APPROVED,
+    ON_HOLD
 }

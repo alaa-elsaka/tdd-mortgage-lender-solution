@@ -1,6 +1,9 @@
 package model;
 
+import java.util.UUID;
+
 public class Loan {
+    private final UUID id;
     private final long requestedAmount;
     private final int dti;
     private final int creditScore;
@@ -10,6 +13,7 @@ public class Loan {
     private LoanStatus status;
 
     public Loan(long requestedAmount, int dti, int creditScore, long savings) {
+        this.id = UUID.randomUUID();
         this.requestedAmount = requestedAmount;
         this.dti = dti;
         this.creditScore = creditScore;
@@ -54,5 +58,9 @@ public class Loan {
 
     public long getSavings() {
         return savings;
+    }
+
+    public UUID getId() {
+        return id;
     }
 }

@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e42c47f-55f3-40d4-8973-3fb3f72c2ad6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/LoanApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/LoanStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Qualification.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Lender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Lender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Loan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Loan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/LoanStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/LoanStatus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/LenderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/LenderTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -142,7 +140,7 @@
       <option name="presentableId" value="Default" />
       <updated>1611764688053</updated>
       <workItem from="1611764689286" duration="53000" />
-      <workItem from="1611764757793" duration="2256000" />
+      <workItem from="1611764757793" duration="2970000" />
     </task>
     <servers />
   </component>
