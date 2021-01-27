@@ -8,15 +8,21 @@ import java.util.UUID;
 
 public class Lender {
     private long availableFund;
+    private long pendingFund;
     private final Map<UUID, Loan> loans;
 
     public Lender(long initialFund) {
         this.availableFund = initialFund;
+        this.pendingFund = 0;
         this.loans = new HashMap<>();
     }
 
-    public long checkAvailableFund() {
+    public long getAvailableFund() {
         return availableFund;
+    }
+
+    public long getPendingFund() {
+        return pendingFund;
     }
 
     public void addFund(long amount) {
@@ -54,6 +60,8 @@ public class Lender {
 
         if (loan.getLoanAmount() <= availableFund) {
             loan.setStatus(LoanStatus.APPROVED);
+            availableFund -= loan.getLoanAmount();
+            pendingFund += loan.getLoanAmount();
         } else {
             loan.setStatus(LoanStatus.ON_HOLD);
         }

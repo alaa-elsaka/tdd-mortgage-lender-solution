@@ -25,8 +25,8 @@ public class LenderTest {
     }
 
     @Test
-    void checkAvailableFund() {
-        long fund = subject.checkAvailableFund();
+    void getAvailableFund() {
+        long fund = subject.getAvailableFund();
 
         assertEquals(100000, fund);
     }
@@ -34,7 +34,7 @@ public class LenderTest {
     @Test
     void addFund() {
         subject.addFund(50000);
-        long fund = subject.checkAvailableFund();
+        long fund = subject.getAvailableFund();
 
         assertEquals(150000, fund);
     }
@@ -84,6 +84,8 @@ public class LenderTest {
         Loan loan = subject.process(fullyQualifiedLoan.getId());
 
         assertEquals(LoanStatus.APPROVED, loan.getStatus());
+        assertEquals(0, subject.getAvailableFund());
+        assertEquals(250000, subject.getPendingFund());
     }
 
     @Test
