@@ -2,17 +2,17 @@ import model.Loan;
 import model.LoanStatus;
 import model.Qualification;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Lender {
     private long availableFund;
-    private final List<Loan> loans;
+    private final Map<UUID, Loan> loans;
 
     public Lender(long initialFund) {
         this.availableFund = initialFund;
-        this.loans = new ArrayList<>();
+        this.loans = new HashMap<>();
     }
 
     public long checkAvailableFund() {
@@ -37,20 +37,16 @@ public class Lender {
             loan.setLoanAmount(loan.getRequestedAmount());
             loan.setStatus(LoanStatus.QUALIFIED);
         }
-        loans.add(loan);
+        loans.put(loan.getId(), loan);
         return loan;
     }
 
-    public List<Loan> getLoans() {
+    public Map<UUID, Loan> getLoans() {
         return loans;
     }
 
     public Loan process(UUID id) throws LoanProcessException {
-        Loan loan = loans
-            .stream()
-            .filter(l -> id.equals(l.getId()))
-            .findAny()
-            .orElseThrow();
+        Loan loan = loans.get(id);
 
         if (loan.getStatus() != LoanStatus.QUALIFIED) {
             throw new LoanProcessException("Do not process unqualified loan");

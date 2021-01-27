@@ -46,7 +46,7 @@ public class LenderTest {
         assertEquals(Qualification.FULLY_QUALIFIED, loan.getQualification());
         assertEquals(250000, loan.getLoanAmount());
         assertEquals(LoanStatus.QUALIFIED, loan.getStatus());
-        assertEquals(loan, subject.getLoans().get(0));
+        assertEquals(loan, subject.getLoans().get(loan.getId()));
     }
 
     @Test
