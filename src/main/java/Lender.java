@@ -2,6 +2,7 @@ import model.Loan;
 import model.LoanStatus;
 import model.Qualification;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -60,6 +61,7 @@ public class Lender {
 
         if (loan.getLoanAmount() <= availableFund) {
             loan.setStatus(LoanStatus.APPROVED);
+            loan.setApprovedDate(LocalDate.now());
             availableFund -= loan.getLoanAmount();
             pendingFund += loan.getLoanAmount();
         } else {

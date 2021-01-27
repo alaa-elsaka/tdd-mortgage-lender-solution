@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class Loan {
@@ -11,6 +12,7 @@ public class Loan {
     private Qualification qualification;
     private long loanAmount;
     private LoanStatus status;
+    private LocalDate approvedDate;
 
     public Loan(long requestedAmount, int dti, int creditScore, long savings) {
         this.id = UUID.randomUUID();
@@ -62,5 +64,13 @@ public class Loan {
 
     public UUID getId() {
         return id;
+    }
+
+    public LocalDate getApprovedDate() {
+        return approvedDate;
+    }
+
+    public void setApprovedDate(LocalDate approvedDate) {
+        this.approvedDate = approvedDate;
     }
 }
