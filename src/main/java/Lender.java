@@ -89,4 +89,16 @@ public class Lender {
 
         return loan;
     }
+
+    public void checkExpired() {
+        loans.values()
+            .stream()
+            .filter(loan -> LoanStatus.APPROVED.equals(loan.getStatus()))
+            .filter(loan -> loan.getApprovedDate().isBefore(LocalDate.now().minusDays(3)))
+            .forEach(loan -> {
+                loan.setStatus(LoanStatus.EXPIRED);
+                availableFund += loan.getLoanAmount();
+                pendingFund -= loan.getLoanAmount();
+            });
+    }
 }

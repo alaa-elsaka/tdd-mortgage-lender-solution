@@ -145,4 +145,23 @@ public class LenderTest {
 
         assertEquals("Applicant cannot accept unapproved loan", exception.getMessage());
     }
+
+    @Test
+    void checkExpired() throws Exception {
+        subject.addFund(1000000);
+        subject.qualifyLoan(fullyQualifiedLoan);
+        subject.process(fullyQualifiedLoan.getId());
+        subject.getLoans().get(fullyQualifiedLoan.getId()).setApprovedDate(LocalDate.now().minusDays(4));
+
+        Loan nonExpiredLoan = new Loan(250000, 21, 700, 100000);
+        subject.qualifyLoan(nonExpiredLoan);
+        subject.process(nonExpiredLoan.getId());
+
+        subject.checkExpired();
+
+        assertEquals(LoanStatus.EXPIRED, subject.getLoans().get(fullyQualifiedLoan.getId()).getStatus());
+        assertEquals(LoanStatus.APPROVED, subject.getLoans().get(nonExpiredLoan.getId()).getStatus());
+        assertEquals(250000, subject.getPendingFund());
+        assertEquals(850000, subject.getAvailableFund());
+    }
 }

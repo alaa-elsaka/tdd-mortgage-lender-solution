@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Lender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Lender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/LoanStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/LoanStatus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/LenderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/LenderTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -137,7 +138,7 @@
       <option name="presentableId" value="Default" />
       <updated>1611764688053</updated>
       <workItem from="1611764689286" duration="53000" />
-      <workItem from="1611764757793" duration="4693000" />
+      <workItem from="1611764757793" duration="5530000" />
     </task>
     <servers />
   </component>
