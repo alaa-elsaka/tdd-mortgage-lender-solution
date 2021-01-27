@@ -69,8 +69,13 @@ public class Lender {
         return loan;
     }
 
-    public Loan applicantReply(UUID id, boolean accept) {
+    public Loan applicantReply(UUID id, boolean accept) throws LoanProcessException {
         Loan loan = loans.get(id);
+
+        if (loan.getStatus() != LoanStatus.APPROVED) {
+            throw new LoanProcessException("Applicant cannot accept unapproved loan");
+        }
+
         pendingFund -= loan.getLoanAmount();
 
         if (accept) {

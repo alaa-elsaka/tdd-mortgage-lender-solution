@@ -132,4 +132,14 @@ public class LenderTest {
         assertEquals(250000, subject.getAvailableFund());
         assertEquals(0, subject.getPendingFund());
     }
+
+    @Test
+    void applicantReply_notApprovedLoans_throwsException() {
+        subject.qualifyLoan(lowDTILoan);
+
+        LoanProcessException exception =
+            assertThrows(LoanProcessException.class, () -> subject.applicantReply(lowDTILoan.getId(), true));
+
+        assertEquals("Applicant cannot accept unapproved loan", exception.getMessage());
+    }
 }
