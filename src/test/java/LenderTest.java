@@ -14,7 +14,7 @@ public class LenderTest {
 
     private Lender subject;
     private Loan fullyQualifiedLoan;
-    private Loan lowDTILoan;
+    private Loan highDTILoan;
     private Loan lowCreditScoreLoan;
     private Loan partiallyQualifiedLoan;
 
@@ -22,7 +22,7 @@ public class LenderTest {
     void setUp() {
         subject = new Lender(100000);
         fullyQualifiedLoan = new Loan(250000, 21, 700, 100000);
-        lowDTILoan = new Loan(250000, 37, 700, 100000);
+        highDTILoan = new Loan(250000, 37, 700, 100000);
         lowCreditScoreLoan = new Loan(250000, 30, 600, 100000);
         partiallyQualifiedLoan = new Loan(250000, 30, 700, 50000);
     }
@@ -54,11 +54,16 @@ public class LenderTest {
 
     @Test
     void qualifyLoan_highDTI_denied() {
-        Loan loan = subject.qualifyLoan(lowDTILoan);
+        Loan loan = subject.qualifyLoan(highDTILoan);
 
         assertEquals(Qualification.NOT_QUALIFIED, loan.getQualification());
         assertEquals(0, loan.getLoanAmount());
         assertEquals(LoanStatus.DENIED, loan.getStatus());
+
+        highDTILoan = new Loan(250000, 36, 700, 100000);
+        loan = subject.qualifyLoan(highDTILoan);
+
+        assertEquals(Qualification.NOT_QUALIFIED, loan.getQualification());
     }
 
     @Test
@@ -68,6 +73,11 @@ public class LenderTest {
         assertEquals(Qualification.NOT_QUALIFIED, loan.getQualification());
         assertEquals(0, loan.getLoanAmount());
         assertEquals(LoanStatus.DENIED, loan.getStatus());
+
+        lowCreditScoreLoan = new Loan(250000, 30, 620, 100000);
+        loan = subject.qualifyLoan(lowCreditScoreLoan);
+
+        assertEquals(Qualification.NOT_QUALIFIED, loan.getQualification());
     }
 
     @Test
@@ -103,10 +113,10 @@ public class LenderTest {
 
     @Test
     void process_notQualified_throwsException() {
-        subject.qualifyLoan(lowDTILoan);
+        subject.qualifyLoan(highDTILoan);
 
         LoanProcessException exception =
-            assertThrows(LoanProcessException.class, () -> subject.process(lowDTILoan.getId()));
+            assertThrows(LoanProcessException.class, () -> subject.process(highDTILoan.getId()));
 
         assertEquals("Do not process unqualified loan", exception.getMessage());
     }
@@ -139,10 +149,10 @@ public class LenderTest {
 
     @Test
     void applicantReply_notApprovedLoans_throwsException() {
-        subject.qualifyLoan(lowDTILoan);
+        subject.qualifyLoan(highDTILoan);
 
         LoanProcessException exception =
-            assertThrows(LoanProcessException.class, () -> subject.applicantReply(lowDTILoan.getId(), true));
+            assertThrows(LoanProcessException.class, () -> subject.applicantReply(highDTILoan.getId(), true));
 
         assertEquals("Applicant cannot accept unapproved loan", exception.getMessage());
     }
@@ -169,7 +179,7 @@ public class LenderTest {
     @Test
     void findLoanByStatus() throws LoanProcessException {
         subject.qualifyLoan(fullyQualifiedLoan);
-        subject.qualifyLoan(lowDTILoan);
+        subject.qualifyLoan(highDTILoan);
         subject.qualifyLoan(lowCreditScoreLoan);
         subject.qualifyLoan(partiallyQualifiedLoan);
 
@@ -179,7 +189,7 @@ public class LenderTest {
         );
 
         assertEquals(
-            Set.of(lowDTILoan, lowCreditScoreLoan),
+            Set.of(highDTILoan, lowCreditScoreLoan),
             subject.find(LoanStatus.DENIED)
         );
 
